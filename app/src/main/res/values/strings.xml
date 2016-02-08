@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Sunshine</string>
     <string name="action_settings">Settings</string>
+    <string name="string_date">Today, June 24</string>
+    <string name="string_country">Cebu City</string>
+    <string name="string_temp">100</string>
 </resources>
