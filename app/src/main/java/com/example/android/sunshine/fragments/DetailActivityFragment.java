@@ -1,10 +1,12 @@
 package com.example.android.sunshine.fragments;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.android.sunshine.R;
 
@@ -19,6 +21,13 @@ public class DetailActivityFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_detail, container, false);
+        Intent intent = getActivity().getIntent();
+        View view =  inflater.inflate(R.layout.fragment_detail, container, false);
+        if(intent != null && intent.hasExtra(Intent.EXTRA_TEXT)){
+            String details = intent.getStringExtra(Intent.EXTRA_TEXT);
+            ((TextView)view.findViewById(R.id.detail_text))
+                    .setText(details);
+        }
+        return view;
     }
 }
