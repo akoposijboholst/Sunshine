@@ -25,11 +25,11 @@ import java.util.List;
 /**
  * A placeholder fragment containing a simple view for the MainActivity.
  */
-public class MainFragment extends Fragment {
+public class ForecastFragment extends Fragment {
 
     ArrayAdapter<String> mForecastAdapter;
 
-    public MainFragment() {
+    public ForecastFragment() {
     }
 
     @Override
