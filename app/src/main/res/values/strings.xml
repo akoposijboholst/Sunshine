@@ -5,4 +5,5 @@
     <string name="string_country">Cebu City</string>
     <string name="string_temp">100</string>
     <string name="action_refresh">Refresh</string>
+    <string name="title_activity_detail">DetailActivity</string>
 </resources>
