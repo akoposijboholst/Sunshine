@@ -3,6 +3,7 @@ package com.example.android.sunshine.fragments;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ public class DetailActivityFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_detail, container, false);
         if(intent != null && intent.hasExtra(Intent.EXTRA_TEXT)){
             String details = intent.getStringExtra(Intent.EXTRA_TEXT);
+            Log.d("Boholst", details);
             ((TextView)view.findViewById(R.id.detail_text))
                     .setText(details);
         }

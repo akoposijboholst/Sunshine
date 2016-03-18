@@ -6,12 +6,4 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:layout="@layout/fragment_detail" >
-
-    <TextView
-        android:id="@+id/detail_text"
-        android:text="@string/hello_world"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
-</fragment>
+    tools:layout="@layout/activity_detail"/>
