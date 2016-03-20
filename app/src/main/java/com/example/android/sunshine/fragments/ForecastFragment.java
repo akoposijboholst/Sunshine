@@ -1,9 +1,11 @@
 package com.example.android.sunshine.fragments;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.format.Time;
 import android.util.Log;
@@ -43,6 +45,7 @@ public class ForecastFragment extends Fragment {
 
     ArrayAdapter<String> mForecastAdapter;
     ListView listView;
+    String LOG_TAG = "ForecastFragment";
 
     public ForecastFragment() {
     }
@@ -62,10 +65,38 @@ public class ForecastFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            new FetchWeatherTask().execute("94043");
+            updateWeather();
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void updateWeather() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String location = prefs.getString(getString(R.string.pref_location_key), getString(R.string.pref_location_default));
+        new FetchWeatherTask().execute(location);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateWeather();
+    }
+
+    private String formatHighLows(double high, double low) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String unitType = sharedPref.getString(getString(R.string.pref_units_key), getString(R.string.pref_units_metric));
+        if (unitType.equals(getString(R.string.pref_units_imperial))) {
+            high = (high * 1.8) + 32;
+            low = (low * 1.8) + 32;
+        } else if (!unitType.equals(getString(R.string.pref_units_metric))) {
+            Log.d(LOG_TAG, "Unit type not found: " + unitType);
+        }
+        long roundedHigh = Math.round(high);
+        long rounderLow = Math.round(low);
+
+        String highLowStr = roundedHigh + "/" + rounderLow;
+        return highLowStr;
     }
 
     @Override
@@ -73,22 +104,11 @@ public class ForecastFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_main, container, false);
-        String[] forecast = {
-                "Today - Sunny - 88/64",
-                "Tomorrow - Foggy - 70/40",
-                "Weds - Cloudy - 72/63",
-                "Thurs - Asleroids - 75/65",
-                "Fri - HeavyRain - 65/56",
-                "Sat - HELP TRAPPED IN WEATHERSTATION - 60/51",
-                "Sun - Sunny - 80/68"
-        };
-
-        List<String> weekForecast = new ArrayList<String>(Arrays.asList(forecast));
         listView = (ListView) view.findViewById(R.id.listview_forecase);
         mForecastAdapter = new ArrayAdapter<String>(getActivity(),
                 R.layout.list_item_forecast,
                 R.id.list_item_forecast_textview,
-                weekForecast);
+                new ArrayList<String>());
         listView.setAdapter(mForecastAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -105,7 +125,6 @@ public class ForecastFragment extends Fragment {
     public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {  /* The date/time conversion code is going to be moved outside the asynctask later,
          * so for convenience we're breaking it out into its own method now.
          */
-        String LOG_TAG = "ForecastFragment";
 
         private String getReadableDateString(long time) {
             // Because the API returns a unix timestamp (measured in seconds),
@@ -266,7 +285,7 @@ public class ForecastFragment extends Fragment {
                 }
                 forecastJsonStr = buffer.toString();
             } catch (IOException e) {
-                Log.d(LOG_TAG, "Error ", e);
+                Log.d(LOG_TAG, "Error");
                 // If the code didn't successfully get the weather data, there's no point in attemping
                 // to parse it.
                 return null;
