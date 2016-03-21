@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
-        }else if(id == R.id.action_refresh){
+        }else if(id == R.id.action_map){
             openPreferredLocationInMap();
         }
 
@@ -57,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                 .appendQueryParameter("q", location)
                 .build();
 
+        Log.d("kayat", "lols");
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(geoLocation);
 
