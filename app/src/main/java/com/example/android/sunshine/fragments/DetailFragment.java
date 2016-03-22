@@ -32,10 +32,12 @@ public class DetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         Intent intent = getActivity().getIntent();
-        View view =  inflater.inflate(R.layout.fragment_detail, container, false);
-        if(intent != null && intent.hasExtra(Intent.EXTRA_TEXT)){
+        View view = inflater.inflate(R.layout.fragment_detail, container, false);
+        if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
             mForecastStr = intent.getStringExtra(Intent.EXTRA_TEXT);
-            ((TextView)view.findViewById(R.id.detail_text))
+        }
+        if (null != mForecastStr) {
+            ((TextView) view.findViewById(R.id.detail_text))
                     .setText(mForecastStr);
         }
         return view;
@@ -48,14 +50,14 @@ public class DetailFragment extends Fragment {
         MenuItem menuItem = menu.findItem(R.id.action_share);
         ShareActionProvider mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(menuItem);
 
-        if(mShareActionProvider != null){
+        if (mShareActionProvider != null) {
             mShareActionProvider.setShareIntent(createShareForecastIntent());
-        }else{
+        } else {
             Log.d("DetailFragment", "Share action provider is null?");
         }
     }
 
-    private Intent createShareForecastIntent(){
+    private Intent createShareForecastIntent() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         shareIntent.setType("text/plain");
