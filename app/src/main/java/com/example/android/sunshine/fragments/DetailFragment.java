@@ -33,8 +33,8 @@ public class DetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         Intent intent = getActivity().getIntent();
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
-        if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
-            mForecastStr = intent.getStringExtra(Intent.EXTRA_TEXT);
+        if (intent != null) {
+            mForecastStr = intent.getDataString();
         }
         if (null != mForecastStr) {
             ((TextView) view.findViewById(R.id.detail_text))
