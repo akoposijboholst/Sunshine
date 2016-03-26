@@ -10,12 +10,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.android.sunshine.R;
+import com.example.android.sunshine.fragments.ForecastFragment;
 import com.example.android.sunshine.utils.Utility;
 
 public class MainActivity extends AppCompatActivity {
+    private final String FORECASTFRAGMENT_TAG = "FFTAG";
+    private String mLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        mLocation = Utility.getPreferredLocation(this);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
@@ -41,14 +45,14 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             startActivity(new Intent(this, SettingsActivity.class));
             return true;
-        }else if(id == R.id.action_map){
+        } else if (id == R.id.action_map) {
             openPreferredLocationInMap();
         }
 
         return super.onOptionsItemSelected(item);
     }
 
-    private void openPreferredLocationInMap(){
+    private void openPreferredLocationInMap() {
         String location = Utility.getPreferredLocation(this);
 
         Uri geoLocation = Uri.parse("geo:0,0?").buildUpon()
@@ -58,10 +62,24 @@ public class MainActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(geoLocation);
 
-        if(intent.resolveActivity(getPackageManager()) != null){
+        if (intent.resolveActivity(getPackageManager()) != null) {
             startActivity(intent);
-        }else{
-            Log.d("MainActivity", "Couldn't call " +  location);
+        } else {
+            Log.d("MainActivity", "Couldn't call " + location);
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String location = Utility.getPreferredLocation(this);
+        // update the location in our second pane using the fragment manager
+        if (location != null && !location.equals(mLocation)) {
+            ForecastFragment ff = (ForecastFragment) getSupportFragmentManager().findFragmentByTag(FORECASTFRAGMENT_TAG);
+            if (null != ff) {
+                ff.onLocationChanged();
+            }
+            mLocation = location;
         }
     }
 }

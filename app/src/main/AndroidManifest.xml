@@ -17,8 +17,9 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <action android:name="android.intent.action.VIEW"/>
-                <data android:scheme="geo"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <data android:scheme="geo" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -42,8 +43,15 @@
         </activity>
 
         <provider
+            android:name=".data.WeatherProvider"
             android:authorities="com.example.android.sunshine"
-            android:name=".data.WeatherProvider" />
+            android:enabled="true"
+            android:exported="true" />
     </application>
+    <permission
+        android:name="com.myapp.LICENSE_TO_KILL"
+        android:protectionLevel="dangerous"
+        android:label="Licensed to Kill"
+        />
 
 </manifest>
